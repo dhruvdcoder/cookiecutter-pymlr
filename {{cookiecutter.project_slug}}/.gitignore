@@ -1,0 +1,15 @@
+__pycache__
+.venv*
+*.pyc
+!docs_source/index.rst
+docs_source/*.rst*
+docs
+**.DS_Store
+**.coverage
+**.hypothesis
+coverage.xml
+**.idea
+docstring-coverage.txt
+.mypy_cache/
+data/**
+checkpoints/**

@@ -1,0 +1,48 @@
+name: Build Docs
+
+on:
+  push:
+    branches: [ main, dev/main ]
+  pull_request:
+    branches: [ main, dev/main ]
+
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # we will need the complete history.
+    # checkout@v2 will fetch only last commit
+    # So we fetch all
+    # checkout@v2 will leave git in a detached head state
+    # Hence, we need to temporarily create a branch.
+    # NOTE: we cannot push this brach
+    - run: |
+          git switch -c "temp-branch-for-docs"
+          git fetch --prune --unshallow --tags
+    - name: Set up Python
+      uses: actions/setup-python@v2.2.2
+      with:
+        python-version: {{ cookiecutter.python_versions.requires[-1] }}
+    - name: Build Docs
+      run: |
+        nox --force-color --session=docs_build
+    - name: Upload html doc as Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: DocumentationHTML
+        path: docs_build/
+    - name: Deploy Docs
+      # deploy only after merge
+      if: {{ "${{github.event_name == 'push'}}" }}
+      uses: peaceiris/actions-gh-pages@v3.7.3
+      with:
+        github_token: {{ "${{ secrets.GITHUB_TOKEN }}" }}
+        publish_dir: ./docs_build
+        keep_files: false
+        {%- if cookiecutter.docs_cname | length %}
+        cname: {{ cookiecutter.docs_cname }}
+        {%- endif %}
+        enable_jekyll: false
+        force_orphan: true
+        publish_branch: gh-pages

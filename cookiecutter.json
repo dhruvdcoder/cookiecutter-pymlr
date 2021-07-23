@@ -1,0 +1,86 @@
+{
+  "_extensions": [
+    "cookiecutter.extensions.SlugifyExtension"
+  ],
+  "_copy_without_render": [
+    "docs/templates"
+  ],
+  "author": {
+    "name": "Dhruvesh Patel",
+    "email": "1793dnp@gmail.com",
+    "github": "dhruvdcoder"
+  },
+  "other_contributors": {},
+  "project_name": "Python Research Project",
+  "project_slug": "{{ cookiecutter.project_name| slugify(separator='_') }}",
+  "project_url": null,
+  "project_docs_url": null,
+  "project_source_url": null,
+  "project_description": "Python Research Project contains all the boilerplate you need to create a Python package.",
+  "project_org": "Dhruvesh Patel",
+  "pypi_username": "dhruveshp",
+  "github_username": "dhruvdcoder",
+  "github_repo": "{{ cookiecutter.project_slug }}",
+  "use_pytest": [
+    "y",
+    "n"
+  ],
+  "use_pypi_deployment": [
+    "n",
+    "y"
+  ],
+  "use_safety": [
+    "n",
+    "y"
+  ],
+  "use_typeguard": [
+    "n",
+    "y"
+  ],
+  "use_xdoctest": [
+    "y",
+    "n"
+  ],
+  "use_docs": [
+    "y",
+    "n"
+  ],
+  "command_line_interface": [
+    "Click",
+    "Argparse",
+    "No command-line interface"
+  ],
+  "create_author_file": "y",
+  "license": [
+    "MIT",
+    "Apache-2.0",
+    "GPL-3.0",
+    "Not open source"
+  ],
+  "development_status": [
+    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 1 - Planning",
+    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 6 - Mature",
+    "Development Status :: 7 - Inactive"
+  ],
+  "created": "{% now 'utc', '%Y-%m-%d' %}",
+  "keywords": "ML|AI",
+  "python_versions": {
+    "requires": [
+      3.7,
+      3.8,
+      3.9
+    ]
+  },
+  "version": "0.0.0",
+  "os": {
+    "tests": [
+      "macos-latest",
+      "ubuntu-latest"
+    ]
+  },
+  "docs_cname": "dhruveshp.com"
+}

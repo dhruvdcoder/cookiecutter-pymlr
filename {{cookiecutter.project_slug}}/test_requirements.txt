@@ -1,0 +1,4 @@
+pytest
+hypothesis
+pre-commit
+coverage[toml]

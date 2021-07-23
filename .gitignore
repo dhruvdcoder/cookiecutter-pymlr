@@ -1,0 +1,4 @@
+# OSX specific ignores
+*.DS_Store
+.AppleDouble
+.LSOverride
