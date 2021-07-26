@@ -153,16 +153,26 @@ def xdoctest(session: Session) -> None:
     session.install("xdoctest[colors]")
     session.run("python", "-m", "xdoctest", package, *args)
 
+def _clear_docs_build_dir(session: Session, d: str)->None:
+    build_dir = Path(args[-1])
+
+    if build_dir.exists():
+        session.log(f"Clearing {build_dir}")
+        shutil.rmtree(build_dir)
+
 
 @session(name="docs-build", python="3.8")
 def docs_build(session: Session) -> None:
     """Build the documentation."""
-    args = session.posargs
+    args = session.posargs or ["docs", "docs/_build"]
     session.install('-r', 'doc_requirements.txt')
-    session.cd('docs')
-    build_dir = ('../docs_build')
+    _clear_docs_build_dir(session, args[-1])
+    session.run('sphinx-build', *args)
 
-    if build_dir.exists():
-        shutil.rmtree(build_dir)
-
-    session.run('python', 'make.py', *args)
+@session(python="3.8")
+def docs(session: Session) -> None:
+    """Build and serve the documentation with live reloading on file changes."""
+    args = session.posargs or ["--open-browser", "docs", "docs/_build"]
+    session.install("-r", "doc_requirements.txt")
+    _clear_docs_build_dir(args[-1])
+    session.run("sphinx-autobuild", *args)
