@@ -5,6 +5,7 @@ from pathlib import Path
 from textwrap import dedent
 
 import nox
+from nox import Session
 
 package = "{{cookiecutter.project_slug}}"
 python_versions = {{ cookiecutter.python_versions.requires | string }}
@@ -103,7 +104,7 @@ def mypy(session: Session) -> None:
     # read the mypy version from lint_requirements.txt
     with open('lint_requirements.txt') as f:
         for line in f:
-            if mypy in line:
+            if "mypy" in line:
                 mypy_version = line.strip()
     session.install(mypy_version)
     session.run("mypy", *args)
