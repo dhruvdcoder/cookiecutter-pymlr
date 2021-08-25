@@ -10,6 +10,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+          token: ${{ secrets.GH_TOKEN }} # Need to use token to commit the changelog as admin.
 
     - name: Generate changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.2
@@ -20,7 +22,7 @@ jobs:
         unreleasedLabel: "🚧Unreleased🚧"
         issues: true
         pullRequests: true
-        prWoLabels: false
+        prWoLabels: true
         compareLink: true
         output: CHANGELOG.md
         breakingLabel: "### 💥 Breaking Changes:"
@@ -54,6 +56,22 @@ jobs:
                         "ci":{
                                 "prefix":"### 👷 Build and CI",
                                 "labels":["ci", "build"]
+                        },
+                        "configs":{
+                                "prefix":"### ⚙️  Model and hyperparameter search configs",
+                                "labels":["configs", "config"]
+                        },
+                        "utils":{
+                                "prefix":"### 🧪 Peripheral utilities",
+                                "labels":["utils", "utilities"]
+                        },
+                        "data":{
+                                "prefix":"### 💾 Data",
+                                "labels":["data", "datasets"]
+                        },
+                        "analysis":{
+                                "prefix":"### 📊 Analysis",
+                                "labels":["analysis"]
                         }
                 }
         # See: emojipedia.org for emoji codes

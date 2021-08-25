@@ -25,8 +25,8 @@
 - name: duplicate
   description: This issue or pull request already exists
   color: cfd3d7
-- name: enhancement
-  description: New feature or request
+- name: new_method
+  description: New model/method/experiment
   color: a2eeef
 - name: github_actions
   description: Pull requests that update Github_actions code
@@ -64,3 +64,15 @@
 - name: wontfix
   description: This will not be worked on
   color: ffffff
+- name: configs
+  description: Updates to configs--models and/or hyperparam sweep.
+  color: ffa500
+- name: utils
+  description: Updates to utilities and scripts which are not central to the project.
+  color: fae105
+- name: data
+  description: Changes related to datasets/data.
+  color: 8F2235
+- name: analysis
+  description: Post-hoc or pre-modelling analysis.
+  color: 9ae7ea
