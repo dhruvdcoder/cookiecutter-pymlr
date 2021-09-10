@@ -5,7 +5,7 @@ from pathlib import Path
 from textwrap import dedent
 
 import nox
-from nox import Session
+from nox import Session, session
 
 package = "{{cookiecutter.project_slug}}"
 python_versions = {{ cookiecutter.python_versions.requires | string }}
@@ -155,7 +155,7 @@ def xdoctest(session: Session) -> None:
     session.run("python", "-m", "xdoctest", package, *args)
 
 def _clear_docs_build_dir(session: Session, d: str)->None:
-    build_dir = Path(args[-1])
+    build_dir = Path(d)
 
     if build_dir.exists():
         session.log(f"Clearing {build_dir}")
@@ -168,4 +168,4 @@ def docs_build(session: Session) -> None:
     args = session.posargs or ["-b", "html" ,"docs", "docs/_build"]
     session.install('-r', 'doc_requirements.txt')
     _clear_docs_build_dir(session, args[-1])
-    session.run('sphinx', *args)
+    session.run('sphinx-build', *args)

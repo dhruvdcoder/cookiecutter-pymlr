@@ -34,8 +34,11 @@ repos:
         log_file: docstring-coverage.txt
 
       - id: darglint # default config comes from .darglint
+        name: darglint
+        entry: python -m darglint
         args: [-v, '2']
         types: [python]
+        language: python
         exclude: "test_.*"
 
       - id: trailing-whitespace
@@ -61,3 +64,5 @@ repos:
       - id: check-toml
         name: Check Toml
         entry: check-toml
+        language: system
+        types: [toml]

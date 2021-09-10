@@ -1,7 +1,9 @@
 import logging
 import os
 import sys
-{% if cookiecutter.command_line_interface=="Click" %} import click {% endif %}
+{%- if cookiecutter.command_line_interface=="Click" %}
+import click
+{%- endif %}
 
 {%- if cookiecutter.command_line_interface|lower == 'argparse' %}
 import argparse

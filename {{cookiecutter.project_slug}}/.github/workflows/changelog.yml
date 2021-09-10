@@ -11,12 +11,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-          token: ${{ secrets.GH_TOKEN }} # Need to use token to commit the changelog as admin.
+          token: {% raw %}${{ secrets.GH_TOKEN }}{% endraw %} # Need to use token to commit the changelog as admin.
 
     - name: Generate changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.2
       with:
-        token: ${{ secrets.GH_TOKEN }}
+        token: {% raw %} ${{ secrets.GH_TOKEN }} {% endraw %}
         author: true
         unreleased: true
         unreleasedLabel: "🚧Unreleased🚧"

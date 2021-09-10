@@ -5,6 +5,7 @@
 {%- endfor %}
 {%- endmacro %}
 
+{% raw %}
 {%- macro toctree(docnames) -%}
 .. toctree::
    :maxdepth: {{ maxdepth }}
@@ -41,3 +42,4 @@
 {% endfor %}
 {%- endif %}
 {% endif %}
+{% endraw %}

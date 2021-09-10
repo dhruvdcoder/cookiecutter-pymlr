@@ -60,6 +60,5 @@ html_sidebars = {
         "navigation.html",
         "relations.html",
         "searchbox.html",
-        "versioning.html",
     ]
 }
