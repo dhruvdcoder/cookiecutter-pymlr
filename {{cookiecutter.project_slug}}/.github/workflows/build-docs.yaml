@@ -43,7 +43,7 @@ jobs:
       if: {{ "${{github.event_name == 'push'}}" }}
       uses: peaceiris/actions-gh-pages@v3.7.3
       with:
-        github_token: {{ "${{ secrets.GITHUB_TOKEN }}" }}
+        github_token: {{ "${{ secrets.GH_TOKEN }}" }}
         publish_dir: ./docs_build
         keep_files: false
         {%- if cookiecutter.docs_cname | length %}
