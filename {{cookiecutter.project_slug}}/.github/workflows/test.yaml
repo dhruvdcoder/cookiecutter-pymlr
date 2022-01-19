@@ -35,7 +35,9 @@ jobs:
       NOXSESSION: {{ "${{ matrix.session }}" }}
 
     steps:
-
+    - name: Checkout the repo
+      uses: actions/checkout@v2
+      
     - name: Set up Python {{ "${{ matrix.python-version }}" }}
       uses: actions/setup-python@v2.2.2
       with:
@@ -51,21 +53,21 @@ jobs:
         nox --session=${{ "{{" }} matrix.session {{ "}}" }}
 
     - name: Combine coverage data and display human readable report
-      if: ${{ "{{" }} matrix.session == "tests" && matrix.python-version == "{{ cookiecutter.python_versions.requires[-1] }}" && matrix.os == "{{ cookiecutter.os.tests[-1] }}" {{ "}}" }}
+      if: ${{ "{{" }} matrix.session == 'tests' && matrix.python-version == '{{ cookiecutter.python_versions.requires[-1] }}' && matrix.os == '{{ cookiecutter.os.tests[-1] }}' {{ "}}" }}
       run: |
         nox --force-color --session=coverage
 
     - name: Create coverage report
-      if: ${{ "{{" }} matrix.session == "tests" && matrix.python-version == "{{ cookiecutter.python_versions.requires[-1] }}" && matrix.os == "{{ cookiecutter.os.tests[-1] }}" {{ "}}" }}
+      if: ${{ "{{" }} matrix.session == 'tests' && matrix.python-version == '{{ cookiecutter.python_versions.requires[-1] }}' && matrix.os == '{{ cookiecutter.os.tests[-1] }}' {{ "}}" }}
       run: |
         nox --force-color --session=coverage -- xml
 
     - name: Upload coverage report
-      if: ${{ "{{" }} matrix.session == "tests" && matrix.python-version == "{{ cookiecutter.python_versions.requires[-1] }}" && matrix.os == "{{ cookiecutter.os.tests[-1] }}" {{ "}}" }}
+      if: ${{ "{{" }} matrix.session == 'tests' && matrix.python-version == '{{ cookiecutter.python_versions.requires[-1] }}' && matrix.os == '{{ cookiecutter.os.tests[-1] }}' {{ "}}" }}
       uses: codecov/codecov-action@v1.5.2
 
     - name: Upload coverage data as artifact
-      if: ${{ "{{" }} matrix.session == "tests" && matrix.python-version == "{{ cookiecutter.python_versions.requires[-1] }}" && matrix.os == "{{ cookiecutter.os.tests[-1] }}" {{ "}}" }}
+      if: ${{ "{{" }} matrix.session == 'tests' && matrix.python-version == '{{ cookiecutter.python_versions.requires[-1] }}' && matrix.os == '{{ cookiecutter.os.tests[-1] }}' {{ "}}" }}
       uses: "actions/upload-artifact@v2.2.4"
       with:
         name: coverage-data
