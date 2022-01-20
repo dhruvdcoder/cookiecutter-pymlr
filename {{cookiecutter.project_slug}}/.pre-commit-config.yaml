@@ -38,7 +38,7 @@ repos:
         entry: python -m darglint
         args: [-v, '2']
         types: [python]
-        language: python
+        language: system
         exclude: "test_.*"
 
       - id: trailing-whitespace
