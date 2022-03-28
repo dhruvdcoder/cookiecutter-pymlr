@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 echo "=======Creating virtual env========="
-python3 -m virtualenv  .venv_{{project_slug}}
-source .venv_{{project_slug}}/bin/activate
+python3 -m virtualenv  .venv_{{cookiecutter.project_slug}}
+source .venv_{{cookiecutter.project_slug}}/bin/activate
 
 echo "=======Install test requirements======="
 pip install -r test_requirements.txt
@@ -19,4 +19,4 @@ mkdir -p logs
 echo "=======Login to wandb (optional)==============="
 wandb init
 
-echo "Do 'source .venv_{{project_slug}}/bin/activate' to load the enviroment."
+echo "Do 'source .venv_{{cookiecutter.project_slug}}/bin/activate' to load the enviroment."
