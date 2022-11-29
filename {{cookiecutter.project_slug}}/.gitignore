@@ -10,3 +10,6 @@ docstring-coverage.txt
 .mypy_cache/
 data/**
 checkpoints/**
+
+# ignore all notebooks
+**.ipynb
