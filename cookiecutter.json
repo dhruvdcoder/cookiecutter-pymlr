@@ -21,6 +21,15 @@
   "pypi_username": "dhruveshp",
   "github_username": "dhruvdcoder",
   "github_repo": "{{ cookiecutter.project_slug }}",
+  "python_version": "3.9.7",
+  "venv_tool": [
+    "conda",
+    "virtualenv"
+  ],
+  "use_wandb": [
+    "y",
+    "n"
+  ],
   "use_pytest": [
     "y",
     "n"
@@ -70,9 +79,7 @@
   "keywords": "ML|AI",
   "python_versions": {
     "requires": [
-      3.7,
-      3.8,
-      3.9
+      "{{ cookiecutter.python_version }}"
     ]
   },
   "version": "0.0.0",
