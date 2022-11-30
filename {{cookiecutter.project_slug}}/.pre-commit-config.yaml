@@ -2,6 +2,23 @@ default_language_version:
   python: python3.8
 exclude: (^docs/)
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0 # Use the ref you want to point at
+    hooks:
+      - id: trailing-whitespace
+        name: Trim Trailing Whitespace
+        types: [text]
+        stages: [commit, push, manual]
+      - id: end-of-file-fixer
+        name: Fix End of Files
+        types: [text]
+        stages: [commit, push, manual]
+      - id: check-yaml
+        name: Check Yaml
+        types: [yaml]
+      - id: check-toml
+        name: Check Toml
+        types: [toml]
   - repo: local
     hooks:
       - id: black
@@ -30,39 +47,13 @@ repos:
         types: [python]
         exclude: "test_.*"
         language: system
-        args: [--fail-under, '50'] # fail if less than 50 of code has docstrings
+        args: [--fail-under, "50"] # fail if less than 50 of code has docstrings
         log_file: docstring-coverage.txt
 
       - id: darglint # default config comes from .darglint
         name: darglint
         entry: python -m darglint
-        args: [-v, '2']
+        args: [-v, "2"]
         types: [python]
         language: system
         exclude: "test_.*"
-
-      - id: trailing-whitespace
-        name: Trim Trailing Whitespace
-        entry: trailing-whitespace-fixer
-        language: system
-        types: [text]
-        stages: [commit, push, manual]
-
-      - id: check-yaml
-        name: Check Yaml
-        entry: check-yaml
-        language: system
-        types: [yaml]
-
-      - id: end-of-file-fixer
-        name: Fix End of Files
-        entry: end-of-file-fixer
-        language: system
-        types: [text]
-        stages: [commit, push, manual]
-
-      - id: check-toml
-        name: Check Toml
-        entry: check-toml
-        language: system
-        types: [toml]

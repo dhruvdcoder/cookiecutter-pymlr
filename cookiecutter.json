@@ -13,18 +13,22 @@
   "other_contributors": {},
   "project_name": "Python Research Project",
   "project_slug": "{{ cookiecutter.project_name| slugify(separator='_') }}",
-  "project_url": null,
-  "project_docs_url": null,
-  "project_source_url": null,
   "project_description": "Python Research Project contains all the boilerplate you need to create a Python package.",
   "project_org": "Dhruvesh Patel",
   "pypi_username": "dhruveshp",
   "github_username": "dhruvdcoder",
   "github_repo": "{{ cookiecutter.project_slug }}",
   "python_version": "3.9.7",
+  "project_url": "https://github.com/{{cookiecutter.github_username}}/{{github_repo}}",
+  "project_docs_url": "https://{{cookiecutter.project_slug}}.readthedocs.io",
+  "project_source_url": "https://github.com/{{cookiecutter.github_username}}/{{github_repo}}",
   "venv_tool": [
     "conda",
     "virtualenv"
+  ],
+  "use_tango": [
+    "n",
+    "y"
   ],
   "use_wandb": [
     "y",

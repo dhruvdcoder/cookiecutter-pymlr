@@ -1,2 +1,6 @@
 jupyterlab
 jupytext
+{% if cookiecutter.use_wandb=='y' -%}
+wandb
+wandb-utils
+{% endif -%}
