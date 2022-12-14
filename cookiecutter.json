@@ -19,9 +19,9 @@
   "github_username": "dhruvdcoder",
   "github_repo": "{{ cookiecutter.project_slug }}",
   "python_version": "3.9.7",
-  "project_url": "https://github.com/{{cookiecutter.github_username}}/{{github_repo}}",
+  "project_url": "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.github_repo}}",
   "project_docs_url": "https://{{cookiecutter.project_slug}}.readthedocs.io",
-  "project_source_url": "https://github.com/{{cookiecutter.github_username}}/{{github_repo}}",
+  "project_source_url": "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.github_repo}}",
   "use_vscode": [
     "y",
     "n"
