@@ -1,0 +1,6 @@
+{
+    "python.linting.mypyArgs": [
+        "--config",
+        "${workspaceFolder}/pyproject.toml"
+    ]
+}

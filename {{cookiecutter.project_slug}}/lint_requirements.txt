@@ -6,5 +6,6 @@ flake8
 flake8-docstrings
 flake8-annotations
 flake8-black
+autoflake
 darglint
 pre-commit-hooks>=4.0.1
