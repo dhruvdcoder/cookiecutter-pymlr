@@ -62,6 +62,10 @@
     "y",
     "n"
   ],
+  "use_umass_clusters": [
+    "n",
+    "y"
+  ],
   "command_line_interface": [
     "Click",
     "Argparse",
