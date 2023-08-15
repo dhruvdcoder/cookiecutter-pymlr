@@ -1,6 +1,14 @@
+numpy
+pandas
+matplotlib
+seaborn
+ipykernel
 jupyterlab
 jupytext
 {% if cookiecutter.use_wandb=='y' -%}
 wandb
 wandb-utils
+{% endif -%}
+{% if use_tango=='y' -%}
+ai2-tango
 {% endif -%}

@@ -55,14 +55,26 @@
     "y"
   ],
   "use_xdoctest": [
-    "y",
-    "n"
+    "n",
+    "y"
   ],
   "use_docs": [
+    "n",
+    "y"
+  ],
+  "use_umass_clusters": [
     "y",
     "n"
   ],
-  "use_umass_clusters": [
+  "use_nox": [
+    "n",
+    "y"
+  ],
+  "use_pre_commit": [
+    "n",
+    "y"
+  ],
+  "use_github_actions": [
     "n",
     "y"
   ],

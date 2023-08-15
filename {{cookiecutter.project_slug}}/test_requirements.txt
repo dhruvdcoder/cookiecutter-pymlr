@@ -1,5 +1,9 @@
+{% if cookiecutter.use_nox=='y' -%}
 nox
+{% endif -%}
 pytest
 hypothesis
+{% if cookiecutter.use_pre_commit=='y' -%}
 pre-commit
+{% endif -%}
 coverage[toml]
