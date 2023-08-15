@@ -7,7 +7,7 @@
 1. Clone repository with recursive. 
 
 ```
-git clone --recurse-submodules {{ cookiecutter.github_url }}
+git clone --recurse-submodules https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.github_repo}}
 ```
 
 1. Create an new environment using conda.
