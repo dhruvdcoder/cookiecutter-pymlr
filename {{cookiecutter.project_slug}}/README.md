@@ -39,8 +39,12 @@ echo "activated conda"
 ```
 git 
 pip install -e .
-pip install -r doc_requirements.txt
+```
+and the following if you are going to develop on the same code-base
+
+```
 pip install -r lint_requirements.txt
+pip install -r test_requirements.txt
 ```
 
 ## Downloading datasets

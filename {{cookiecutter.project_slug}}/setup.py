@@ -104,6 +104,6 @@ setup(
 {%- endif %}
     ],
 
-  python_requires=">={{ cookiecutter.python_versions.requires | map('float') | min }}, <={{ cookiecutter.python_versions.requires | map('float') | max }}"
+  python_requires=">={{ cookiecutter.python_version}}"
 
 )
