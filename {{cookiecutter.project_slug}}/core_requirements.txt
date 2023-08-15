@@ -9,6 +9,6 @@ jupytext
 wandb
 wandb-utils
 {% endif -%}
-{% if use_tango=='y' -%}
+{% if cookiecutter.use_tango=='y' -%}
 ai2-tango
 {% endif -%}
