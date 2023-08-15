@@ -30,7 +30,7 @@ source $bash_profile
 echo "sourced $bash_profile"
 fi
 echo "activating conda"
-conda activate ./.venv_{{cookiecutter.project_slut}}
+conda activate ./.venv_{{cookiecutter.project_slug}}
 echo "activated conda"
 ```
 
