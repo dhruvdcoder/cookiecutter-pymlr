@@ -16,7 +16,9 @@ REMOVE_PATHS = [
 for path in REMOVE_PATHS:
     path = path.strip()
     if path and os.path.exists(path):
+        print(f"Removing directory {path}")
         if os.path.isdir(path):
             os.rmdir(path)
         else:
+            print(f"Removing file {path}")
             os.unlink(path)
