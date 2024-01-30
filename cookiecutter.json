@@ -13,7 +13,7 @@
   "other_contributors": {},
   "project_name": "Python Research Project",
   "project_slug": "{{ cookiecutter.project_name| slugify(separator='_') }}",
-  "project_description": "Python Research Project contains all the boilerplate you need to create a Python package.",
+  "project_description": "{{ cookiecutter.project_name }}",
   "project_org": "Dhruvesh Patel",
   "pypi_username": "dhruveshp",
   "github_username": "dhruvdcoder",
@@ -35,8 +35,8 @@
     "y"
   ],
   "use_wandb": [
-    "y",
-    "n"
+    "n",
+    "y"
   ],
   "use_pytest": [
     "y",
@@ -79,9 +79,10 @@
     "y"
   ],
   "command_line_interface": [
+    "No command-line interface",
     "Click",
     "Argparse",
-    "No command-line interface"
+    "hydra"
   ],
   "create_author_file": "y",
   "license": [

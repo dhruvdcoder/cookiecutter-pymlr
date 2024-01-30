@@ -62,7 +62,7 @@ setup(
     long_description_content_type="text/markdown",
     url="{{ cookiecutter.project_url }}",
     project_urls={
-        "Documentation": "{{cookiecutter.project_docs_url}}",
+        {%- if cookiecutter.use_docs == "y"-%}"Documentation": "{{cookiecutter.project_docs_url}},"{%- endif -%}
         "Source Code": "{{ cookiecutter.project_source_url }}",
     },
     packages=find_packages(

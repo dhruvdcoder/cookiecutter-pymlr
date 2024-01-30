@@ -13,7 +13,6 @@ git clone --recurse-submodules https://github.com/{{cookiecutter.github_username
 1. Create an new environment using conda.
 
 ```
-export CONDA_ALWAYS_YES="true"
 conda create -p ./.venv_{{cookiecutter.project_slug}} python=3.9.7 pip
 conda init --all
 bashrc="$HOME/.bashrc"

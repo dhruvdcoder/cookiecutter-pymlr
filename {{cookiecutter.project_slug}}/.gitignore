@@ -10,6 +10,7 @@ docstring-coverage.txt
 .mypy_cache/
 data/**
 checkpoints/**
-
+**.egg-info
+.vscode/**
 # ignore all notebooks
 **.ipynb

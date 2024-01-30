@@ -2,9 +2,7 @@ numpy
 pandas
 matplotlib
 seaborn
-ipykernel
-jupyterlab
-jupytext
+jupyter
 {% if cookiecutter.use_wandb=='y' -%}
 wandb
 wandb-utils
