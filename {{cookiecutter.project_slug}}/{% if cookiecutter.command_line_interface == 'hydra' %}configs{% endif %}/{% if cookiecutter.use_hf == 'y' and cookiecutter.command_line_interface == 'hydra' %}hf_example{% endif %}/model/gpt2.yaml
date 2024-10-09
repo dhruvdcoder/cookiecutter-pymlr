@@ -1,0 +1,12 @@
+# @package _global_
+
+model:
+  _target_: transformers.GPT2LMHeadModel.from_pretrained
+  pretrained_model_name_or_path: gpt2
+  pad_token_id: 50256 # id of <|endoftext|> AutoModel.from_pretrained only exposes token_id, not token https://huggingface.co/docs/transformers/v4.37.2/en/main_classes/configuration#transformers.PretrainedConfig
+
+tokenizer:
+  _target_: transformers.AutoTokenizer.from_pretrained
+  pretrained_model_name_or_path: ${model.pretrained_model_name_or_path}
+  pad_token: <|endoftext|> # AutoTokenizer.from_pretrained only exposes token, and not token_id https://github.com/huggingface/transformers/blob/345b9b1a6a308a1fa6559251eb33ead2211240ac/src/transformers/tokenization_utils_base.py#L795
+  add_bos_token: false

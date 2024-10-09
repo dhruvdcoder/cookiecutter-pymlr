@@ -1,0 +1,6 @@
+source_language: de
+target_language: en
+dataset:
+  _target_: datasets.load_dataset
+  path: ${paths.data_dir}/wmt19/${..source_language}-${..target_language}
+  split: ???

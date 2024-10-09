@@ -151,7 +151,7 @@ def save_predictions(
         "Or change `continuous_decoding.utils.saving.save_predictions` function logic."
     )
 
-{% if cookiecutter.use_hydra == "y" %}
+{% if cookiecutter.command_line_interface == "hydra" %}
 from omegaconf import OmegaConf
 
 def tags_to_str(cfg, location: str = "tags", join_str="__", join_kv_str="=") -> str:

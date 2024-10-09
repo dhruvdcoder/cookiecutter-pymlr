@@ -1,0 +1,8 @@
+# @package _global_
+model:
+  _target_: continuous_decoding.generation.mt5.MT5ForConditionalGenerationWithStepBack.from_pretrained
+  pretrained_model_name_or_path: "bigscience/mt0-base"
+
+tags:
+  model: mt0
+  model_size: base

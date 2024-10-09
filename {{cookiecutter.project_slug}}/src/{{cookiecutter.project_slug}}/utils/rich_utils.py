@@ -1,4 +1,4 @@
-{% if cookiecutter.use_hydra == "y" %}
+{% if cookiecutter.command_line_interface == "hydra" %}
 import logging
 from pathlib import Path
 from typing import Sequence

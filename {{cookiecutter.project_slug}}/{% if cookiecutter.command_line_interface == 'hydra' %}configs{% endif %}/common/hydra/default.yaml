@@ -1,0 +1,32 @@
+
+# enable color logging
+defaults:
+  - override hydra_logging: colorlog
+  - override job_logging: colorlog
+
+# output directory, generated dynamically on each run
+run:
+  dir: ${paths.log_dir}/${job_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+sweep:
+  dir: ${paths.log_dir}/${job_name}/multiruns/${now:%Y-%m-%d}_${now:%H-%M-%S}
+  subdir: ${hydra.job.num}
+
+job_logging:
+  root:
+    level: INFO
+  handlers:
+    file:
+      # Incorporates fix from https://github.com/facebookresearch/hydra/pull/2242
+      filename: ${hydra.runtime.output_dir}/${job_name}.log
+  loggers:
+    __main__:
+      level: INFO
+    datasets:
+      level: INFO
+    datasets.arrow_dataset:
+      level: INFO
+
+job:
+  env_set:
+    PROJECT_ROOT: "."
+    HF_HOME: "/work/pi_mccallum_umass_edu/dhruveshpate_umass_edu/hf_cache"

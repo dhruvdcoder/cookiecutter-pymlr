@@ -1,0 +1,70 @@
+defaults:
+  - _self_
+  - paths: default
+  - hydra: default
+  - model: mt0
+  - data@train_data: wmt19_processed
+  - data@val_data: wmt19_processed
+  - data@test_data: wmt19_processed
+  - wandb: "on"
+  - experiment: null
+  - debug: null
+  - optional cluster: default
+
+# Keep common utils
+hydra:
+  job:
+    env_set:
+      PROJECT_ROOT: "."
+      OMP_NUM_THREADS: "1"
+  searchpath:
+    - file://${oc.env:PROJECT_ROOT}/configs/common
+
+seed: 789
+device: cuda
+max_length: 50
+branching_factor: 50
+source_language: de
+target_language: en
+filter_on_target_length: true # Filter out examples where target length is greater than max_length
+
+tokenizer:
+  _target_: transformers.AutoTokenizer.from_pretrained
+  pretrained_model_name_or_path: ${model.pretrained_model_name_or_path}
+
+train_data:
+  split: "train"
+
+val_data:
+  split: "validation"
+
+test_data:
+  split: "test"
+
+init_search_net_using_decoder: true # Initialize the search network using the decoder weights
+
+training_args:
+  _target_: transformers.Seq2SeqTrainingArguments
+  output_dir: ${paths.output_dir}
+  eval_strategy: epoch
+  per_device_train_batch_size: 64
+  per_device_eval_batch_size: 64
+  learning_rate: 5e-5
+  weight_decay: 0.01
+  save_total_limit: 2
+  predict_with_generate: true # TODO: Make sure model is compatible with this before setting to true
+  prediction_loss_only: false # Can be set to false after predict_with_generate is set to true
+  metric_for_best_model: bleu # change to bleu when predict_with_generate is set to true
+  greater_is_better: true # change to true when metric is changed to bleu
+  generation_max_length: 100
+  num_train_epochs: 10
+  lr_scheduler_type: linear
+  warmup_ratio: 0.01
+  seed: ${seed}
+  report_to: none # needs a string value not None
+
+tags:
+  task: MT
+  dataset: WMT19-${source_language}-${target_language}
+  branching: ${branching_factor}
+  length: ${max_length}
