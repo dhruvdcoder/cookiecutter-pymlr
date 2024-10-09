@@ -10,3 +10,12 @@ wandb-utils
 {% if cookiecutter.use_tango=='y' -%}
 ai2-tango
 {% endif -%}
+{% if cookiecutter.use_lightning_utilities=='y' -%}
+lightning_utilities
+{% endif -%}
+{% if cookiecutter.use_torchtnt=='y' -%}
+torchtnt
+{% endif -%}
+{% if cookiecutter.tqdm=='tqdm_loggable' -%}
+tqdm-loggable
+{% endif -%}

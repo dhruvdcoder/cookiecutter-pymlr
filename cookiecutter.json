@@ -38,6 +38,19 @@
     "n",
     "y"
   ],
+  "use_lightning_utilities": [
+    "n",
+    "y"
+  ],
+  "use_torchtnt": [
+    "n",
+    "y"
+  ],
+  "tqdm": [
+    "tqdm",
+    "tqdm_loggable",
+    "lightning"
+  ],
   "use_wandb": [
     "n",
     "y"
