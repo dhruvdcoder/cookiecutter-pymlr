@@ -1,0 +1,224 @@
+# region: Import necessary modules
+from pathlib import Path
+import signal
+import hydra
+from omegaconf import DictConfig, OmegaConf
+from {{cookiecutter.project_slug}}.utils.debug import set_flags
+from {{cookiecutter.project_slug}}.utils.hf_wandb import HydraWandbCallback
+from {{cookiecutter.project_slug}}.utils.pylogger import get_pylogger
+from {{cookiecutter.project_slug}}.utils.seed import seed_everything
+from {{cookiecutter.project_slug}}.utils import utils
+from {{cookiecutter.project_slug}}.generation.mt5 import (
+    MT5ForConditionalGenerationWithContinuousDecoding,
+)
+from transformers import (
+    DataCollatorForSeq2Seq,
+    Seq2SeqTrainingArguments,
+    Seq2SeqTrainer,
+)
+import torch
+import evaluate
+import numpy as np
+
+from {{cookiecutter.project_slug}}.utils.signal import (
+    print_signal_handlers,
+    remove_handlers,
+)
+
+# endregion
+
+
+# Hydra configuration parameters
+_HYDRA_PARAMS = {
+    "version_base": "1.3",
+    "config_path": str(Path("../../../configs") / "train_cd"),
+    "config_name": "train.yaml",
+}
+
+# region: Initialize the logger
+logger = get_pylogger(__name__, rank_zero_only=True)
+
+# other global constants and functions
+PREFIX = {
+    "de-en": "Translate German to English: ",
+}
+# endregion
+
+
+def train(cfg: DictConfig):
+
+    # Main processing logic for the script (move it inside `foo` function)
+    logger.info(f"Seed everything with <{cfg.seed}>")
+    seed_everything(cfg.seed)
+    utils.log_gpu_memory_metadata()
+
+    # script logic
+    max_length = cfg.max_length
+    target_ln = cfg.target_language
+    source_ln = cfg.source_language
+    device = torch.device(cfg.device)
+
+    # %%
+    # Load the dataset
+    train_dataset = hydra.utils.instantiate(cfg.train_data)
+    val_dataset = hydra.utils.instantiate(cfg.val_data)
+    # Filter out data with targets longer than max_length
+    logger.info(f"Train dataset size before filtering: {len(train_dataset)}")
+    logger.info(
+        f"Validation dataset size before filtering: {len(val_dataset)}"
+    )
+    if cfg.get("filter_on_target_length", False):
+        logger.info(
+            f"Filtering out data with targets longer than {max_length}"
+        )
+
+        train_dataset = train_dataset.filter(
+            lambda x: len(x[target_ln]) <= max_length
+        )
+        val_dataset = val_dataset.filter(
+            lambda x: len(x[target_ln]) <= max_length
+        )
+    else:
+        logger.info("Not filtering out data based on target length")
+
+    logger.info(f"Train dataset size after filtering: {len(train_dataset)}")
+    logger.info(f"Validation dataset size after filtering: {len(val_dataset)}")
+
+    # %%
+    # tokenizer
+    tokenizer = hydra.utils.instantiate(cfg.tokenizer)
+    tokenizer.src_lang = source_ln
+    tokenizer.tgt_lang = target_ln
+
+    prefix = PREFIX[f"{source_ln}-{target_ln}"]
+
+    def preprocess(examples):
+        inputs = [prefix + ex for ex in examples[source_ln]]
+        targets = examples[target_ln]
+        ids = examples["id"]
+        model_inputs = tokenizer(inputs)  # don't truncate the inputs
+        # Process targets
+        with tokenizer.as_target_tokenizer():
+            labels = tokenizer(targets, max_length=max_length, truncation=True)
+        model_inputs["labels"] = labels["input_ids"]
+        # model_inputs["ids"] = ids
+        model_inputs["id"] = ids
+        return model_inputs
+
+    tokenized_train_dataset = train_dataset.map(
+        preprocess,
+        batched=True,
+        remove_columns=[source_ln, target_ln],
+    )
+    tokenized_val_dataset = val_dataset.map(
+        preprocess,
+        batched=True,
+        remove_columns=[source_ln, target_ln],
+    )
+
+    # %%
+    # model
+    model = hydra.utils.instantiate(cfg.model)
+    if cfg.get("init_search_net_using_decoder", False):
+        logger.info("Copying decoder weights to search network")
+        model.copy_weights_from_base(
+            allow_missing=[
+                r"^block\.\d+\.layer\.2\.CustomEncDecAttention\..*",  # should match block.0.layer.2.layer.0.CustomEncDecAttention etc.
+                r"^block\.\d+\.layer\.2\.layer_norm\..*",  # should match block.0.layer.2.layer_norm
+            ]
+        )  # Call this after loading the model to copy the decoder (black) weights to the search network (red)
+    # freeze the encoder and decoder
+    for param in model.encoder.parameters():
+        param.requires_grad = False
+    for param in model.decoder.parameters():
+        param.requires_grad = False
+
+    for param in model.lm_head.parameters():
+        param.requires_grad = False
+
+    # setting it to a decoder only model
+    model.config.is_encoder_decoder = False  # newly added
+
+    # %%
+    # Create the data collator
+    data_collator = DataCollatorForSeq2Seq(tokenizer, model=model)
+
+    # %%
+    # eval metric
+
+    metric = evaluate.load("sacrebleu")
+
+    def postprocess_text(preds, labels):
+        preds = [pred.strip() for pred in preds]
+        labels = [[label.strip()] for label in labels]
+
+        return preds, labels
+
+    # Ref: https://huggingface.co/docs/transformers/en/tasks/translation
+    def compute_metrics(eval_preds):
+        preds, labels = eval_preds
+        if isinstance(preds, tuple):
+            preds = preds[0]
+        preds = np.where(preds != -100, preds, tokenizer.pad_token_id)   # newly added
+        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+
+        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+        decoded_labels = tokenizer.batch_decode(
+            labels, skip_special_tokens=True
+        )
+
+        decoded_preds, decoded_labels = postprocess_text(
+            decoded_preds, decoded_labels
+        )
+
+        result = metric.compute(
+            predictions=decoded_preds, references=decoded_labels
+        )
+        result = {"bleu": result["score"]}
+
+        prediction_lens = [
+            np.count_nonzero(pred != tokenizer.pad_token_id) for pred in preds
+        ]
+        result["gen_len"] = np.mean(prediction_lens)
+        result = {k: round(v, 4) for k, v in result.items()}
+        return result
+
+    # %%
+    # trainer
+
+    training_args = hydra.utils.instantiate(
+        cfg.training_args, run_name=cfg.job_name
+    )
+    if cfg.get("use_wandb", False):
+        wandb_callback = HydraWandbCallback(cfg)
+    else:
+        wandb_callback = None
+
+    trainer = Seq2SeqTrainer(
+        model=model,
+        args=training_args,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        tokenizer=tokenizer,
+        data_collator=data_collator,
+        compute_metrics=compute_metrics,
+        callbacks=[wandb_callback] if wandb_callback else None,
+    )
+
+    trainer.train()
+
+
+@hydra.main(**_HYDRA_PARAMS)
+def main(cfg: DictConfig) -> None:
+    set_flags(cfg)
+    print_signal_handlers()
+    remove_handlers([signal.SIGTERM], prefix="main")
+    try:
+        train(cfg)
+    except Exception as e:
+        logger.exception(e)
+        raise e
+
+
+if __name__ == "__main__":
+    main()
