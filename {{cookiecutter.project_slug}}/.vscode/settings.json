@@ -5,6 +5,7 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "jupyter.debugJustMyCode": false,
+    "debugpy.debugJustMyCode": false,
     "flake8.args": [
         "--config",
         "${workspaceFolder}/.flake8"
@@ -13,39 +14,23 @@
         "--config-file",
         "${workspaceFolder}/pyproject.toml"
     ],
-    {
-        "python.testing.pytestArgs": [
-            "tests"
-        ],
-        "python.testing.unittestEnabled": false,
-        "python.testing.pytestEnabled": true,
-        "jupyter.debugJustMyCode": false,
-        "flake8.args": [
-            "--config",
-            "${workspaceFolder}/.flake8"
-        ],
-        "mypy-type-checker.args": [
-            "--config-file",
-            "${workspaceFolder}/pyproject.toml"
-        ],
-        "mypy-type-checker.reportingScope": "file",
-        "mypy-type-checker.preferDaemon": false,
-        "mypy-type-checker.cwd": "${workspaceFolder}",
-        "mypy-type-checker.severity": {
-            "error": "Error",
-            "warning": "Warning",
-            "note": "Information"
-        },
-        "isort.args": [
-            "--settings-path",
-            "${workspaceFolder}/pyproject.toml"
-        ],
-        "[python]": {
-            "editor.defaultFormatter": "ms-python.black-formatter",
-            "editor.formatOnSave": true,
-            "editor.codeActionsOnSave": {
-                "source.organizeImports": true,
-            }
+    "mypy-type-checker.reportingScope": "file",
+    "mypy-type-checker.preferDaemon": false,
+    "mypy-type-checker.cwd": "${workspaceFolder}",
+    "mypy-type-checker.severity": {
+        "error": "Error",
+        "warning": "Warning",
+        "note": "Information"
+    },
+    "isort.args": [
+        "--settings-path",
+        "${workspaceFolder}/pyproject.toml"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always",
         }
-    }
+    },
 }
